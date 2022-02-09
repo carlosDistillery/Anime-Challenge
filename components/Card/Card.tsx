@@ -1,6 +1,9 @@
 import React from "react";
+import Link from "next/link";
+import styles from "../../styles/card.module.css";
 
 interface CardProps {
+  id: number;
   title: string;
   stars: number;
   likes: number;
@@ -21,7 +24,7 @@ function Card(props: CardProps) {
   });
   const [likes, setLikes] = React.useState(props.likes);
   const [isSelectedLike] = React.useState(() => {
-    if (localStorage.getItem("stars")) {
+    if (localStorage.getItem("likes")) {
       const isSelected = JSON.parse(localStorage.getItem("likes")).filter(
         (anime: { title: string }) => anime.title === props.title
       );
@@ -32,7 +35,7 @@ function Card(props: CardProps) {
   });
 
   const handleCacheData = (cacheKey: "stars" | "likes") => {
-    cacheKey === "stars" ? setStars(stars + 1) : setLikes(stars + 1);
+    cacheKey === "stars" ? setStars(stars + 1) : setLikes(likes + 1);
 
     if (!localStorage.getItem(cacheKey)) {
       localStorage.setItem(cacheKey, JSON.stringify([{ title: props.title }]));
@@ -44,19 +47,19 @@ function Card(props: CardProps) {
   };
 
   return (
-    <div>
-      {props.title} - {props.likes} -
+    <div className={styles.cardContainer}>
+      <Link href={`/animes/${props.id}`}>{props.title}</Link>
       <button
         disabled={stars !== props.stars || isSelectedStar}
         onClick={() => handleCacheData("stars")}
       >
-        {stars}
+        🌟: {stars}
       </button>
       <button
         disabled={likes !== props.likes || isSelectedLike}
         onClick={() => handleCacheData("likes")}
       >
-        {likes}
+        ❤️: {likes}
       </button>
     </div>
   );

@@ -1,12 +1,25 @@
+import React from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+// * Types
+import { Anime } from "../types/anime";
 // * Components
 import { Card } from "../components/Card/Card";
 import { useAnimes } from "../hooks/useAnimes";
+import InfiniteScroll from "react-infinite-scroller";
 
 const Home: NextPage = () => {
-  const { response, isLoading, isError, setFilter } = useAnimes();
+  const {
+    response,
+    isLoading,
+    isError,
+    setFilter,
+    filter,
+    fetchNextPage,
+    isFetching,
+    hasNextPage,
+  } = useAnimes();
 
   if (isLoading)
     return (
@@ -32,27 +45,56 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1>Anime List</h1>
-      <div className="filter">
+      <div className={styles.filterContainer}>
         <div>
           Filter:
-          <button onClick={() => setFilter("stars")}>🌟</button>
-          <button onClick={() => setFilter("likes")}>🖤</button>
+          <button
+            onClick={() => setFilter(filter === "stars" ? "all" : "stars")}
+          >
+            🌟
+          </button>
+          <button
+            onClick={() => setFilter(filter === "likes" ? "all" : "likes")}
+          >
+            🖤
+          </button>
         </div>
-        <div>Search</div>
-        <div>8 Results</div>
+        <form>
+          <label>
+            <input type="text" />
+          </label>
+        </form>
+
+        <div> {response?.pages?.length * 10} Results</div>
       </div>
 
       <main>
-        {response?.map((anime) => {
-          return (
-            <Card
-              key={anime.attributes.slug}
-              title={anime.attributes.slug}
-              stars={anime.attributes.userCount}
-              likes={anime.attributes.favoritesCount}
-            />
-          );
-        })}
+        <InfiniteScroll
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gridGap: "1em",
+            justifyContent: "center",
+          }}
+          loadMore={fetchNextPage}
+          hasMore={hasNextPage}
+          // useWindow={false}
+        >
+          {response?.pages.map((page) => {
+            return page.data.map((anime: Anime) => {
+              return (
+                <Card
+                  id={anime.id}
+                  key={anime.attributes.slug}
+                  title={anime.attributes.slug}
+                  likes={anime.attributes.favoritesCount}
+                  stars={anime.attributes.userCount}
+                />
+              );
+            });
+          })}
+        </InfiniteScroll>
+        {isFetching && <p>Loading...</p>}
       </main>
     </div>
   );

@@ -1,19 +1,18 @@
 import React from "react";
-import { useQuery } from "react-query";
-import { AxiosResponse } from "axios";
+import { useInfiniteQuery } from "react-query";
 import { Anime } from "../types/anime";
-import { axiosInstance } from "../axiosInstance/index";
+
 import { filterBySelectOption } from "../utils/index";
 
-const requestAnimes = async () => {
-  const {
-    data: { data },
-  }: AxiosResponse<{
-    data: Anime[] | [];
-    meta: { count: number };
-    links: { first: string; next: string; last: string };
-  }> = await axiosInstance.get("anime");
-
+const fetchUrl = async (
+  url: string
+): Promise<{
+  data: Anime[] | [];
+  meta: { count: number };
+  links: { first: string; next: string; last: string };
+}> => {
+  const response = await fetch(url);
+  const data = await response.json();
   return data;
 };
 
@@ -21,13 +20,42 @@ export function useAnimes() {
   const [filter, setFilter] = React.useState<"all" | "stars" | "likes">("all");
 
   const selectFn = React.useCallback(
-    (data) => filterBySelectOption({ animes: data, filter }),
+    (data) => {
+      return {
+        pages: filterBySelectOption({ animes: [...data.pages], filter }),
+        pageParams: [...data.pageParams],
+      };
+    },
     [filter]
   );
 
-  const { data, isLoading, isError } = useQuery("animes", requestAnimes, {
-    select: filter === "all" ? undefined : selectFn,
-  });
+  const initialUrl =
+    "https://kitsu.io/api/edge/anime?page%5Blimit%5D=10&page%5Boffset%5D=0";
 
-  return { response: data, isLoading, isError, setFilter };
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetching,
+    isError,
+  } = useInfiniteQuery(
+    "animes",
+    ({ pageParam = initialUrl }) => fetchUrl(pageParam),
+    {
+      getNextPageParam: (lastPage: any) => lastPage.links.next || undefined,
+      select: filter === "all" ? undefined : selectFn,
+    }
+  );
+
+  return {
+    response: data,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isLoading,
+    isError,
+    setFilter,
+    filter,
+  };
 }
