@@ -10,8 +10,8 @@ interface CardProps {
 }
 
 function Card(props: CardProps) {
-  const [stars, setStars] = React.useState(props.stars);
   // * Lazy initialization for performance app
+  const [stars, setStars] = React.useState(props.stars);
   const [isSelectedStar] = React.useState(() => {
     if (localStorage.getItem("stars")) {
       const isSelected = JSON.parse(localStorage.getItem("stars")).filter(

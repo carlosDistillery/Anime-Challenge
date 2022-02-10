@@ -133,3 +133,9 @@ export interface Anime {
     };
   };
 }
+
+
+export interface CardHOCProps {
+  ({ product, children }: any): JSX.Element;
+  // Title: (props: any) => JSX.Element;
+}
