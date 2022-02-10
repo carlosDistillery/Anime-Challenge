@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export interface Anime {
   id: number;
   type: string;
@@ -138,4 +140,14 @@ export interface Anime {
 export interface CardHOCProps {
   ({ product, children }: any): JSX.Element;
   // Title: (props: any) => JSX.Element;
+}
+
+export interface AnimeCardContextProps {
+  stars?: number,
+  setStars?: Dispatch<SetStateAction<number | undefined>>,
+  isSelectedStar?: boolean,
+  likes?: number,
+  setLikes?: Dispatch<SetStateAction<number | undefined>>,
+  isSelectedLike?: boolean,
+  handleCacheData?: (cacheKey: "stars" | "likes") => void,
 }

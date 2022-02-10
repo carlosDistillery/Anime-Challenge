@@ -1,6 +1,7 @@
 import React from "react";
+import { AnimeCardContextProps } from "../../types/anime";
 
-const AnimeCardContext = React.createContext({});
+const AnimeCardContext = React.createContext({} as AnimeCardContextProps);
 
 interface Props {
   children: React.ReactElement | React.ReactElement[];
@@ -51,7 +52,7 @@ export function AnimeCardProvider(props: Props) {
     }
   };
 
-  const value = [
+  const value = {
     stars,
     setStars,
     isSelectedStar,
@@ -59,7 +60,7 @@ export function AnimeCardProvider(props: Props) {
     setLikes,
     isSelectedLike,
     handleCacheData,
-  ];
+  };
 
   return (
     <AnimeCardContext.Provider value={value}>
