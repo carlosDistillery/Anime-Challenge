@@ -49,7 +49,11 @@ const Home: NextPage = () => {
 
   const getResults = () => {
     if (filter === "stars" || filter === "likes") {
-      return JSON.parse(localStorage.getItem(filter)).length;
+      if (JSON.parse(localStorage.getItem(filter))) {
+        return JSON.parse(localStorage.getItem(filter)).length;
+      } else {
+        return `No Animes to filter`;
+      }
     } else {
       return response?.pages?.length * 10;
     }
@@ -65,7 +69,7 @@ const Home: NextPage = () => {
         <h1>Anime List</h1>
       </div>
       <div className={styles.filterContainer}>
-        <div>
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
           Filter:
           <button
             style={{ background: "none", border: 0, cursor: "pointer" }}
@@ -119,18 +123,6 @@ const Home: NextPage = () => {
             });
           })}
         </InfiniteScroll>
-
-        {isFetching && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "2em",
-            }}
-          >
-            Loading...
-          </div>
-        )}
       </main>
     </div>
   );
