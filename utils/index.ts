@@ -27,3 +27,17 @@ export function filterBySelectOption({ animes, filter }: { animes: any, filter: 
 }
 
 
+
+export function readCacheData({ itemKey, valueToFind }: { itemKey: string, valueToFind: string }) {
+  if (typeof window !== "undefined" && localStorage.getItem(itemKey)) {
+
+    const isSelected = JSON.parse(localStorage.getItem(itemKey)).filter(
+      (cacheValue: { title: string }) =>
+        cacheValue.title === valueToFind
+    );
+
+    return !!isSelected.length;
+  } else {
+    return false;
+  }
+}

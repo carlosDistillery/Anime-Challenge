@@ -1,22 +1,39 @@
 import { NextPageContext } from "next";
 import Link from "next/link";
-import { Anime } from "../../types/anime";
-import { useCharacters } from "../../hooks/useCharacters";
-import { useEpisodes } from "../../hooks/useEpisodes";
+import { Anime as AnimeType } from "../../types/anime";
 // * Styles
 import styles from "../../styles/anime.module.css";
+// * Hooks
+import { useCharacters } from "../../hooks/useCharacters";
+import { useEpisodes } from "../../hooks/useEpisodes";
+// * Components
+import { AnimerCard } from "../../components/Card/AnimeCard";
+import { AnimeDetails } from "../../components/Card/AnimeDetails";
+import { AnimeStars } from "../../components/Card/AnimeStars";
+import { AnimeImage } from "../../components/Card/AnimeImage";
+import { BallTriangle } from "react-loader-spinner";
+import { Episode } from "../../components/Episode/Episode";
 
-function Pokemon({ id, data }: { id: string; data: Anime }) {
-  const { response } = useCharacters(id);
+function Anime({ id, data }: { id: string; data: AnimeType }) {
+  const { characters, isLoading } = useCharacters(id);
   const { response: episodes } = useEpisodes(id);
 
   return (
     <div className={styles.container}>
-      <div>
-        <div>
-          <Link href="/">Back</Link>
-          <img alt="Anime" />
-        </div>
+      <div
+        style={{
+          display: "flex",
+          flexFlow: "column",
+          justifyContent: "space-around",
+          alignItems: "center",
+        }}
+      >
+        <AnimerCard values={{ anime: data }}>
+          <Link href="/"> ◀️ Back </Link>
+          <AnimeImage />
+          <AnimeStars />
+          <AnimeDetails />
+        </AnimerCard>
       </div>
       <div>
         <div>
@@ -25,17 +42,53 @@ function Pokemon({ id, data }: { id: string; data: Anime }) {
         </div>
         <section>
           <h3>Characters</h3>
-          <div>
-            {response?.map((obj) => {
-              return <div key={obj.id}>{obj.id}</div>;
+          {isLoading && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "2em",
+              }}
+            >
+              <BallTriangle width="100" color="lightblue" ariaLabel="loading" />
+            </div>
+          )}
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              minHeight: 320,
+              gridGap: "1em",
+            }}
+          >
+            {characters?.map((chacracter: any) => {
+              return (
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    flexFlow: "column",
+                    maxWidth: 100,
+                    textOverflow: "ellipsis",
+                  }}
+                  key={chacracter.data.attributes.id}
+                >
+                  <img
+                    src={chacracter.data.attributes.image?.small}
+                    alt={chacracter.data.attributes.canonicalName}
+                  />
+                  {chacracter.data.attributes.canonicalName}
+                </div>
+              );
             })}
           </div>
         </section>
         <section>
           <h3>Episodes</h3>
+
           <div>
-            {episodes?.map((obj) => {
-              return <button key={obj.id}>{obj.id}</button>;
+            {episodes?.slice(0, 10).map((obj) => {
+              return <Episode key={obj.id} episode={obj.id} />;
             })}
           </div>
         </section>
@@ -44,9 +97,9 @@ function Pokemon({ id, data }: { id: string; data: Anime }) {
   );
 }
 
-Pokemon.getInitialProps = async (ctx: NextPageContext) => {
+Anime.getInitialProps = async (ctx: NextPageContext) => {
   const res = await fetch(`https://kitsu.io/api/edge/anime/${ctx.query.id}`);
   const json = await res.json();
   return { id: ctx.query.id, data: json.data };
 };
-export default Pokemon;
+export default Anime;

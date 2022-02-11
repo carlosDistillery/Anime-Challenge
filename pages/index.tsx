@@ -5,9 +5,12 @@ import styles from "../styles/Home.module.css";
 // * Types
 import { Anime } from "../types/anime";
 // * Components
-import { Card } from "../components/Card/Card";
 import { useAnimes } from "../hooks/useAnimes";
 import InfiniteScroll from "react-infinite-scroller";
+import { AnimerCard } from "../components/Card/AnimeCard";
+import { AnimeStars } from "../components/Card/AnimeStars";
+import { AnimeImage } from "../components/Card/AnimeImage";
+import { BallTriangle } from "react-loader-spinner";
 
 const Home: NextPage = () => {
   const {
@@ -25,7 +28,14 @@ const Home: NextPage = () => {
     return (
       <div className={styles.container}>
         <h1>Anime List</h1>
-        <p>Loading</p>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <BallTriangle
+            heigth="100"
+            width="100"
+            color="lightblue"
+            ariaLabel="loading"
+          />
+        </div>
       </div>
     );
 
@@ -37,37 +47,56 @@ const Home: NextPage = () => {
       </div>
     );
 
+  const handleOnSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    setFilter(e.target?.animeToSearch?.value);
+  };
+
+  const getResults = () => {
+    if (filter === "stars" || filter === "likes") {
+      return JSON.parse(localStorage.getItem(filter)).length;
+    } else {
+      return response?.pages?.length * 10;
+    }
+  };
+
   return (
     <div className={styles.container}>
       <Head>
         <title>Code Challenge</title>
         <meta name="description" content="Code Challenge" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1>Anime List</h1>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <h1>Anime List</h1>
+      </div>
       <div className={styles.filterContainer}>
         <div>
           Filter:
           <button
+            style={{ background: "none", border: 0, cursor: "pointer" }}
             onClick={() => setFilter(filter === "stars" ? "all" : "stars")}
           >
             🌟
           </button>
           <button
+            style={{ background: "none", border: 0, cursor: "pointer" }}
             onClick={() => setFilter(filter === "likes" ? "all" : "likes")}
           >
-            🖤
+            ❤️
           </button>
         </div>
-        <form>
+        <form onSubmit={handleOnSubmit}>
           <label>
-            <input type="text" />
+            <input
+              name="animeToSearch"
+              style={{ borderRadius: 10, width: 300 }}
+              type="text"
+            />
           </label>
         </form>
 
-        <div> {response?.pages?.length * 10} Results</div>
+        <div> {getResults()} Results</div>
       </div>
-
       <main>
         <InfiniteScroll
           style={{
@@ -78,23 +107,40 @@ const Home: NextPage = () => {
           }}
           loadMore={fetchNextPage}
           hasMore={hasNextPage}
-          // useWindow={false}
         >
           {response?.pages.map((page) => {
             return page.data.map((anime: Anime) => {
               return (
-                <Card
-                  id={anime.id}
+                <AnimerCard
                   key={anime.attributes.slug}
-                  title={anime.attributes.slug}
-                  likes={anime.attributes.favoritesCount}
-                  stars={anime.attributes.userCount}
-                />
+                  values={{
+                    anime: anime,
+                  }}
+                >
+                  <AnimeImage />
+                  <AnimeStars />
+                </AnimerCard>
               );
             });
           })}
         </InfiniteScroll>
-        {isFetching && <p>Loading...</p>}
+
+        {isFetching && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "2em",
+            }}
+          >
+            <BallTriangle
+              heigth="100"
+              width="100"
+              color="lightblue"
+              ariaLabel="loading"
+            />
+          </div>
+        )}
       </main>
     </div>
   );

@@ -27,7 +27,10 @@ export interface Anime {
     subtype: string;
     status: string;
     tba: any;
-    posterImage: any;
+    posterImage: {
+      tiny: string,
+      medium: string
+    };
     coverImage: any;
     episodeCount: number;
     episodeLength: number;
@@ -143,11 +146,13 @@ export interface CardHOCProps {
 }
 
 export interface AnimeCardContextProps {
-  stars?: number,
-  setStars?: Dispatch<SetStateAction<number | undefined>>,
+  stars: number,
+  setStars?: Dispatch<SetStateAction<number>>,
   isSelectedStar?: boolean,
-  likes?: number,
-  setLikes?: Dispatch<SetStateAction<number | undefined>>,
+  likes: number,
+  setLikes?: Dispatch<SetStateAction<number>>,
   isSelectedLike?: boolean,
-  handleCacheData?: (cacheKey: "stars" | "likes") => void,
+  handleCacheDataLikes: () => void,
+  handleCacheDataStars: () => void,
+  anime: Anime
 }

@@ -17,10 +17,27 @@ const fetchUrl = async (
 };
 
 export function useAnimes() {
-  const [filter, setFilter] = React.useState<"all" | "stars" | "likes">("all");
+  const [filter, setFilter] = React.useState<"all" | "stars" | "likes">();
 
   const selectFn = React.useCallback(
     (data) => {
+      if (!filter) {
+        return data;
+      }
+
+      if (filter !== "stars" && filter !== "likes") {
+        return {
+          pages: [
+            {
+              data: data.pages
+                .flatMap((x) => x.data)
+                .filter((data: Anime) => data.attributes.slug === filter),
+            },
+          ],
+          pageParams: [...data.pageParams],
+        };
+      }
+
       return {
         pages: filterBySelectOption({ animes: [...data.pages], filter }),
         pageParams: [...data.pageParams],
@@ -45,6 +62,7 @@ export function useAnimes() {
     {
       getNextPageParam: (lastPage: any) => lastPage.links.next || undefined,
       select: filter === "all" ? undefined : selectFn,
+      refetchOnWindowFocus: false,
     }
   );
 

@@ -1,23 +1,34 @@
-import { useAnimeCard } from "./AnimeCardContext";
+import { useAnimeCard } from "./context/AnimeCardContext";
 
 function AnimeStars() {
-  //** TODO pasarle al store la respuesta de la API */
-  const { stars } = useAnimeCard();
+  const {
+    stars,
+    likes,
+    handleCacheDataLikes,
+    handleCacheDataStars,
+    isSelectedStar,
+    isSelectedLike,
+    anime,
+  } = useAnimeCard();
+
   return (
-    <>
-      <button
-        disabled={stars !== props.stars || isSelectedStar}
-        onClick={() => handleCacheData("stars")}
-      >
-        🌟: {stars}
-      </button>
-      <button
-        disabled={likes !== props.likes || isSelectedLike}
-        onClick={() => handleCacheData("likes")}
-      >
-        ❤️: {likes}
-      </button>
-    </>
+    <div style={{ maxWidth: 200 }}>
+      <p style={{ textOverflow: "ellipsis" }}>{anime.attributes.slug}</p>
+      <div style={{ display: "flex", justifyContent: "space-around" }}>
+        <button
+          style={{ height: 30, width: 90 }}
+          onClick={() => handleCacheDataStars()}
+        >
+          {isSelectedStar ? "★" : "☆"} {stars}
+        </button>
+        <button
+          style={{ height: 30, width: 90 }}
+          onClick={() => handleCacheDataLikes()}
+        >
+          {isSelectedLike ? "💔" : "❤️️"} {likes}
+        </button>
+      </div>
+    </div>
   );
 }
 export { AnimeStars };

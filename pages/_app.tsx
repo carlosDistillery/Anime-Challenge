@@ -1,9 +1,9 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-
-const queryClient = new QueryClient();
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import { queryClient } from "../react-query/queryClient";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

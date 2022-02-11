@@ -15,17 +15,36 @@ const fetchUrl = async (props: any) => {
     };
   }> = await axiosInstance.get(`anime/${queryKey[1]}/relationships/characters`);
 
-  return data.data;
+  const charactersPromises = data.data.slice(0, 10).map((character) => {
+    return new Promise((resolve, reject) => {
+      fetch(
+        `https://kitsu.io/api/edge/media-characters/${character.id}/character`
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((info) => {
+          resolve(info);
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    });
+  });
+
+  const info = await Promise.all(charactersPromises);
+  return info;
 };
 
 export function useCharacters(id: string) {
   const { data, isLoading, isFetching, isError } = useQuery(
     ["characters", id],
-    fetchUrl
+    fetchUrl,
+    { refetchOnWindowFocus: false }
   );
 
   return {
-    response: data,
+    characters: data,
     isFetching,
     isLoading,
     isError,
