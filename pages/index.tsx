@@ -11,7 +11,7 @@ import InfiniteScroll from "react-infinite-scroller";
 import { AnimerCard } from "../components/Card/AnimeCard";
 import { AnimeStars } from "../components/Card/AnimeStars";
 import { AnimeImage } from "../components/Card/AnimeImage";
-import { BallTriangle } from "react-loader-spinner";
+
 const Home: NextPage = () => {
   const {
     response,
@@ -29,7 +29,7 @@ const Home: NextPage = () => {
       <div className={styles.container}>
         <h1>Anime List</h1>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <BallTriangle width="100" color="lightblue" ariaLabel="loading" />
+          Loading...
         </div>
       </div>
     );
@@ -128,7 +128,7 @@ const Home: NextPage = () => {
               marginTop: "2em",
             }}
           >
-            <BallTriangle width="100" color="lightblue" ariaLabel="loading" />
+            Loading...
           </div>
         )}
       </main>

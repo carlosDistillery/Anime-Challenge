@@ -12,7 +12,6 @@ import { AnimerCard } from "../../components/Card/AnimeCard";
 import { AnimeDetails } from "../../components/Card/AnimeDetails";
 import { AnimeStars } from "../../components/Card/AnimeStars";
 import { AnimeImage } from "../../components/Card/AnimeImage";
-import { BallTriangle } from "react-loader-spinner";
 import { Episode } from "../../components/Episode/Episode";
 
 function Anime({ id, data }: { id: string; data: AnimeType }) {
@@ -51,7 +50,7 @@ function Anime({ id, data }: { id: string; data: AnimeType }) {
                 marginTop: "2em",
               }}
             >
-              <BallTriangle width="100" color="lightblue" ariaLabel="loading" />
+              Loading...
             </div>
           )}
           <div
