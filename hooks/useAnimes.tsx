@@ -30,7 +30,7 @@ export function useAnimes() {
           pages: [
             {
               data: data.pages
-                .flatMap((x) => x.data)
+                .flatMap((x: any) => x.data)
                 .filter((data: Anime) => data.attributes.slug === filter),
             },
           ],

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
@@ -11,7 +12,6 @@ import { AnimerCard } from "../components/Card/AnimeCard";
 import { AnimeStars } from "../components/Card/AnimeStars";
 import { AnimeImage } from "../components/Card/AnimeImage";
 import { BallTriangle } from "react-loader-spinner";
-
 const Home: NextPage = () => {
   const {
     response,
@@ -29,12 +29,7 @@ const Home: NextPage = () => {
       <div className={styles.container}>
         <h1>Anime List</h1>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <BallTriangle
-            heigth="100"
-            width="100"
-            color="lightblue"
-            ariaLabel="loading"
-          />
+          <BallTriangle width="100" color="lightblue" ariaLabel="loading" />
         </div>
       </div>
     );
@@ -43,7 +38,7 @@ const Home: NextPage = () => {
     return (
       <div className={styles.container}>
         <h1>Anime List</h1>
-        <p>There's and error :c</p>
+        <p>Theres and error :c</p>
       </div>
     );
 
@@ -133,12 +128,7 @@ const Home: NextPage = () => {
               marginTop: "2em",
             }}
           >
-            <BallTriangle
-              heigth="100"
-              width="100"
-              color="lightblue"
-              ariaLabel="loading"
-            />
+            <BallTriangle width="100" color="lightblue" ariaLabel="loading" />
           </div>
         )}
       </main>

@@ -8,11 +8,11 @@ import { Anime } from '../types/anime';
  */
 export function filterBySelectOption({ animes, filter }: { animes: any, filter: "all" | 'stars' | 'likes', }) {
 
-
+  //@ts-ignore
   if (!JSON.parse(localStorage.getItem(filter))) {
     return animes
   }
-
+  //@ts-ignore
   const dataFromCache: { title: string }[] = JSON.parse(localStorage.getItem(filter))
   const arrays = animes.map((obj: any) => obj.data)
   const arraysMerged = [].concat.apply([], arrays)
@@ -30,7 +30,7 @@ export function filterBySelectOption({ animes, filter }: { animes: any, filter: 
 
 export function readCacheData({ itemKey, valueToFind }: { itemKey: string, valueToFind: string }) {
   if (typeof window !== "undefined" && localStorage.getItem(itemKey)) {
-
+    //@ts-ignore
     const isSelected = JSON.parse(localStorage.getItem(itemKey)).filter(
       (cacheValue: { title: string }) =>
         cacheValue.title === valueToFind

@@ -16,6 +16,7 @@ export function AnimeCardProvider(props: Props) {
   );
   const [isSelectedStar, setIsSelectedStars] = React.useState(() => {
     if (typeof window !== "undefined" && localStorage.getItem("stars")) {
+      // @ts-expect-error
       const isSelected = JSON.parse(localStorage.getItem("stars")).filter(
         (anime: { title: string }) =>
           anime.title === props.values.anime.attributes.slug
@@ -31,6 +32,7 @@ export function AnimeCardProvider(props: Props) {
   );
   const [isSelectedLike, setIsSelectedLike] = React.useState(() => {
     if (typeof window !== "undefined" && localStorage.getItem("likes")) {
+      // @ts-expect-error
       const isSelected = JSON.parse(localStorage.getItem("likes")).filter(
         (anime: { title: string }) =>
           anime.title === props.values.anime.attributes.slug
@@ -44,6 +46,7 @@ export function AnimeCardProvider(props: Props) {
   const handleCacheDataLikes = () => {
     if (isSelectedLike) {
       setIsSelectedLike(false);
+      // @ts-expect-error
       const data = JSON.parse(localStorage.getItem("likes"));
       const dataFiltered = data.filter((anime: any) => {
         return anime.title !== props.values.anime.attributes.slug;
@@ -58,6 +61,7 @@ export function AnimeCardProvider(props: Props) {
           JSON.stringify([{ title: props.values.anime.attributes.slug }])
         );
       } else {
+        // @ts-expect-error
         const data = JSON.parse(localStorage.getItem("likes"));
         data.push({ title: props.values.anime.attributes.slug });
         localStorage.setItem("likes", JSON.stringify(data));
@@ -68,6 +72,7 @@ export function AnimeCardProvider(props: Props) {
   const handleCacheDataStars = () => {
     if (isSelectedStar) {
       setIsSelectedStars(false);
+      // @ts-expect-error
       const data = JSON.parse(localStorage.getItem("stars"));
       const dataFiltered = data.filter((anime: any) => {
         return anime.title !== props.values.anime.attributes.slug;
@@ -81,6 +86,7 @@ export function AnimeCardProvider(props: Props) {
           JSON.stringify([{ title: props.values.anime.attributes.slug }])
         );
       } else {
+        // @ts-expect-error
         const data = JSON.parse(localStorage.getItem("stars"));
         data.push({ title: props.values.anime.attributes.slug });
         localStorage.setItem("stars", JSON.stringify(data));

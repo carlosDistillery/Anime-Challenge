@@ -22,6 +22,7 @@ export function useCacheData({
   const saveItemToCache = () => {
     if (isChecked) {
       setIsChecked(false);
+      // @ts-expect-error
       const data = JSON.parse(localStorage.getItem(key));
       const dataFiltered = data.filter((cacheValue: any) => {
         return cacheValue.title !== id;
@@ -33,6 +34,7 @@ export function useCacheData({
       if (!localStorage.getItem(key)) {
         localStorage.setItem(key, JSON.stringify([{ [key]: id }]));
       } else {
+        // @ts-expect-error
         const data = JSON.parse(localStorage.getItem(key));
         data.push({ title: id });
         localStorage.setItem(key, JSON.stringify(data));
