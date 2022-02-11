@@ -1,5 +1,6 @@
 import { NextPageContext } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Anime as AnimeType } from "../../types/anime";
 // * Styles
 import styles from "../../styles/anime.module.css";
@@ -73,9 +74,11 @@ function Anime({ id, data }: { id: string; data: AnimeType }) {
                   }}
                   key={chacracter.data.attributes.id}
                 >
-                  <img
+                  <Image
                     src={chacracter.data.attributes.image?.small}
                     alt={chacracter.data.attributes.canonicalName}
+                    width={100}
+                    height={100}
                   />
                   {chacracter.data.attributes.canonicalName}
                 </div>

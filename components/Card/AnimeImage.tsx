@@ -10,7 +10,7 @@ function AnimeImage() {
   const { anime } = useAnimeCard();
   return (
     <div style={{ cursor: "pointer" }}>
-      <Link href={`/animes/${anime.id}`}>
+      <Link href={`/animes/${anime.id}`} passHref>
         <Image
           loader={() => myLoader({ src: anime.attributes.posterImage.tiny })}
           src="me.png"
